@@ -1,37 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🍹 Patio Rankings — @the_patio_gang</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 2rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 2rem; max-width: 900px; margin: 0 auto; }
     h1 { text-align: center; font-size: 2rem; margin-bottom: 0.25rem; color: #2d3748; }
     .subtitle { text-align: center; color: #718096; margin-bottom: 0.5rem; font-size: 0.95rem; }
-    .updated { text-align: center; color: #a0aec0; font-size: 0.78rem; margin-bottom: 2rem; }
+    .updated { text-align: center; color: #a0aec0; font-size: 0.78rem; margin-bottom: 1.5rem; }
+    nav { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+    .nav-link { background: white; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 600; font-size: 0.9rem; color: #4a5568; text-decoration: none; box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: background 0.15s; }
+    .nav-link:hover { background: #edf2f7; }
+    .section-title { font-size: 1.1rem; font-weight: 600; color: #4a5568; margin-bottom: 0.75rem; padding-left: 0.25rem; }
     .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
     .card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
     .card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.4rem; }
     .card .value { font-size: 1.6rem; font-weight: 700; color: #2d3748; }
     .card .sub { font-size: 0.8rem; color: #718096; margin-top: 0.2rem; }
     .card.highlight .value { color: #38a169; }
-    .section-title { font-size: 1.1rem; font-weight: 600; color: #4a5568; margin-bottom: 0.75rem; padding-left: 0.25rem; }
-    .patio-section { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
-    .patio-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #2d3748; color: white; flex-wrap: wrap; }
-    .patio-name { font-size: 1.1rem; font-weight: 700; flex: 1; }
-    .patio-date { font-size: 0.8rem; color: #a0aec0; }
-    .patio-overall { font-size: 1.2rem; font-weight: 800; }
-    .avg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; padding: 1rem 1.25rem; }
-    .avg-card { text-align: center; }
-    .cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.3rem; }
-    .avg-score { font-size: 1.6rem; font-weight: 800; }
-    .bar-wrap { height: 5px; background: #edf2f7; border-radius: 3px; margin-top: 0.4rem; overflow: hidden; }
-    .bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #667eea, #764ba2); }
-    .table-wrap { overflow: hidden; }
+    .table-wrap { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    thead tr { background: #edf2f7; }
-    thead th { padding: 0.6rem 1rem; text-align: center; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #4a5568; }
+    thead tr { background: #2d3748; color: white; }
+    thead th { padding: 0.7rem 1rem; text-align: center; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
     thead th:first-child { text-align: left; }
     tbody tr { border-top: 1px solid #edf2f7; }
     tbody tr:hover { background: #f7fafc; }
@@ -42,48 +33,58 @@
     .score-high { color: #38a169; font-weight: 700; }
     .score-mid  { color: #d69e2e; font-weight: 700; }
     .score-low  { color: #e53e3e; font-weight: 700; }
-    .leaderboard { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
+    .avg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; padding: 1rem 1.25rem; }
+    .avg-card { text-align: center; }
+    .cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.3rem; }
+    .avg-score { font-size: 1.6rem; font-weight: 800; }
+    .bar-wrap { height: 5px; background: #edf2f7; border-radius: 3px; margin-top: 0.4rem; overflow: hidden; }
+    .bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #667eea, #764ba2); }
+    .patio-section { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
+    .patio-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #2d3748; color: white; flex-wrap: wrap; }
+    .patio-name { font-size: 1.1rem; font-weight: 700; flex: 1; }
+    .patio-date { font-size: 0.8rem; color: #a0aec0; }
+    .patio-overall { font-size: 1.2rem; font-weight: 800; }
+    .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; font-weight: 800; font-size: 0.95rem; }
+    .rank-1 { background: #f6e05e; color: #744210; }
+    .rank-2 { background: #e2e8f0; color: #2d3748; }
+    .rank-3 { background: #fbd38d; color: #744210; }
+    .rank-other { background: #edf2f7; color: #4a5568; font-size: 0.8rem; }
+    .person-card { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 1.25rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .person-info { flex: 1; }
+    .person-name { font-size: 1rem; font-weight: 700; color: #2d3748; }
+    .person-meta { font-size: 0.8rem; color: #718096; margin-top: 0.15rem; }
+    .person-score { font-size: 2rem; font-weight: 800; }
+    .person-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .cat-pill { background: #edf2f7; border-radius: 99px; padding: 0.2rem 0.6rem; font-size: 0.72rem; color: #4a5568; }
+    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .stat-box { background: white; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); flex: 1; min-width: 140px; }
+    .stat-box .s-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.3rem; }
+    .stat-box .s-value { font-size: 1.3rem; font-weight: 700; color: #2d3748; }
+    .stat-box .s-sub { font-size: 0.78rem; color: #718096; }
     footer { text-align: center; font-size: 0.8rem; color: #a0aec0; margin-top: 1rem; }
-  </style>
+</style>
 </head>
 <body>
   <h1>🍹 Patio Rankings</h1>
   <p class="subtitle">@the_patio_gang</p>
-  <p class="updated">Last updated: April 08, 2026 08:58 PM</p>
+  <p class="updated">Last updated: April 08, 2026 09:00 PM</p>
+  
+  <nav>
+    <a href="index.html" class="nav-link">📍 Rankings</a>
+    <a href="leaderboard.html" class="nav-link">🏅 Leaderboard</a>
+  </nav>
 
   <div class="summary-grid">
-    <div class="card highlight">
-      <div class="label">🏟️ Patios Visited</div>
-      <div class="value">1</div>
-    </div>
-    <div class="card">
-      <div class="label">📊 Total Ratings</div>
-      <div class="value">8</div>
-    </div>
-    <div class="card">
-      <div class="label">🏆 Most Generous</div>
-      <div class="value">Mary</div>
-      <div class="sub">5.0 avg ☂️</div>
-    </div>
-    <div class="card">
-      <div class="label">🧐 Toughest Critic</div>
-      <div class="value">Adam</div>
-      <div class="sub">3.0 avg ☂️</div>
-    </div>
+    <div class="card highlight"><div class="label">🏟️ Patios Visited</div><div class="value">1</div></div>
+    <div class="card"><div class="label">📊 Total Ratings</div><div class="value">8</div></div>
+    <div class="card"><div class="label">🏆 Most Generous</div><div class="value">Mary</div><div class="sub">5.0 avg ☂️</div></div>
+    <div class="card"><div class="label">🧐 Toughest Critic</div><div class="value">Adam</div><div class="sub">3.0 avg ☂️</div></div>
   </div>
-
-  <p class="section-title">🏅 Rater Leaderboard (avg overall)</p>
-  <div class="leaderboard">
-    <table>
-      <thead><tr><th style="text-align:left">Person</th><th>Avg ☂️</th></tr></thead>
-      <tbody><tr><td>🥇 Mary</td><td class="score-high">5.0</td></tr><tr><td>🥈 Amanda</td><td class="score-high">4.0</td></tr><tr><td>🥉 Kellen</td><td class="score-high">4.0</td></tr><tr><td>4. Brittany</td><td class="score-high">4.0</td></tr><tr><td>5. Adam</td><td class="score-mid">3.0</td></tr><tr><td>6. Anthony</td><td class="score-mid">3.0</td></tr><tr><td>7. Caroline</td><td class="score-mid">3.0</td></tr><tr><td>8. Daniel</td><td class="score-mid">3.0</td></tr></tbody>
-    </table>
-  </div>
-
   <p class="section-title">📍 Patios (ranked by overall score)</p>
   
   <div class="patio-section">
     <div class="patio-header">
+      <span class="rank-badge rank-1">🥇</span>
       <span class="patio-name">State Line Distillery</span>
       <span class="patio-date">4/8/2026</span>
       <span class="patio-overall score-mid">☂️ 3.62</span>
@@ -98,51 +99,10 @@
     <div class="table-wrap">
       <table>
         <thead><tr><th>Name</th><th>✨ Vibes</th><th>🍺 Bevs</th><th>🙋 Service</th><th>💵 Price</th><th>🚽 Pisser</th><th>☂️ Overall</th></tr></thead>
-        <tbody>
-        <tr>
-          <td><span class="gender-f">●</span> Amanda</td>
-          <td>4</td><td>5</td><td>4</td><td>2</td><td>3</td>
-          <td class="score-high">4</td>
-        </tr>
-        <tr>
-          <td><span class="gender-m">●</span> Adam</td>
-          <td>2</td><td>4</td><td>3</td><td>3</td><td>3</td>
-          <td class="score-mid">3</td>
-        </tr>
-        <tr>
-          <td><span class="gender-m">●</span> Kellen</td>
-          <td>5</td><td>3</td><td>4</td><td>3</td><td>4</td>
-          <td class="score-high">4</td>
-        </tr>
-        <tr>
-          <td><span class="gender-f">●</span> Mary</td>
-          <td>5</td><td>5</td><td>5</td><td>4</td><td>2</td>
-          <td class="score-high">5</td>
-        </tr>
-        <tr>
-          <td><span class="gender-m">●</span> Anthony</td>
-          <td>3</td><td>3</td><td>4</td><td>2</td><td>3</td>
-          <td class="score-mid">3</td>
-        </tr>
-        <tr>
-          <td><span class="gender-f">●</span> Caroline</td>
-          <td>4</td><td>3</td><td>4</td><td>2</td><td>2</td>
-          <td class="score-mid">3</td>
-        </tr>
-        <tr>
-          <td><span class="gender-f">●</span> Brittany</td>
-          <td>4</td><td>5</td><td>4</td><td>3</td><td>3</td>
-          <td class="score-high">4</td>
-        </tr>
-        <tr>
-          <td><span class="gender-m">●</span> Daniel</td>
-          <td>3</td><td>3</td><td>4</td><td>3</td><td>3</td>
-          <td class="score-mid">3</td>
-        </tr></tbody>
+        <tbody><tr><td><span class="gender-f">●</span> Amanda</td><td>4</td><td>5</td><td>4</td><td>2</td><td>3</td><td class="score-high">4</td></tr><tr><td><span class="gender-m">●</span> Adam</td><td>2</td><td>4</td><td>3</td><td>3</td><td>3</td><td class="score-mid">3</td></tr><tr><td><span class="gender-m">●</span> Kellen</td><td>5</td><td>3</td><td>4</td><td>3</td><td>4</td><td class="score-high">4</td></tr><tr><td><span class="gender-f">●</span> Mary</td><td>5</td><td>5</td><td>5</td><td>4</td><td>2</td><td class="score-high">5</td></tr><tr><td><span class="gender-m">●</span> Anthony</td><td>3</td><td>3</td><td>4</td><td>2</td><td>3</td><td class="score-mid">3</td></tr><tr><td><span class="gender-f">●</span> Caroline</td><td>4</td><td>3</td><td>4</td><td>2</td><td>2</td><td class="score-mid">3</td></tr><tr><td><span class="gender-f">●</span> Brittany</td><td>4</td><td>5</td><td>4</td><td>3</td><td>3</td><td class="score-high">4</td></tr><tr><td><span class="gender-m">●</span> Daniel</td><td>3</td><td>3</td><td>4</td><td>3</td><td>3</td><td class="score-mid">3</td></tr></tbody>
       </table>
     </div>
   </div>
-
   <footer>🦞 Auto-updated by Cade · @the_patio_gang</footer>
 </body>
 </html>

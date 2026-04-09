@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏅 Leaderboard — @the_patio_gang</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1a202c; padding: 2rem; max-width: 900px; margin: 0 auto; }
+    h1 { text-align: center; font-size: 2rem; margin-bottom: 0.25rem; color: #2d3748; }
+    .subtitle { text-align: center; color: #718096; margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .updated { text-align: center; color: #a0aec0; font-size: 0.78rem; margin-bottom: 1.5rem; }
+    nav { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+    .nav-link { background: white; border-radius: 8px; padding: 0.5rem 1.25rem; font-weight: 600; font-size: 0.9rem; color: #4a5568; text-decoration: none; box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: background 0.15s; }
+    .nav-link:hover { background: #edf2f7; }
+    .section-title { font-size: 1.1rem; font-weight: 600; color: #4a5568; margin-bottom: 0.75rem; padding-left: 0.25rem; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
+    .card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.4rem; }
+    .card .value { font-size: 1.6rem; font-weight: 700; color: #2d3748; }
+    .card .sub { font-size: 0.8rem; color: #718096; margin-top: 0.2rem; }
+    .card.highlight .value { color: #38a169; }
+    .table-wrap { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead tr { background: #2d3748; color: white; }
+    thead th { padding: 0.7rem 1rem; text-align: center; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    thead th:first-child { text-align: left; }
+    tbody tr { border-top: 1px solid #edf2f7; }
+    tbody tr:hover { background: #f7fafc; }
+    tbody td { padding: 0.65rem 1rem; text-align: center; }
+    tbody td:first-child { text-align: left; font-weight: 600; }
+    .gender-m { color: #3182ce; }
+    .gender-f { color: #d53f8c; }
+    .score-high { color: #38a169; font-weight: 700; }
+    .score-mid  { color: #d69e2e; font-weight: 700; }
+    .score-low  { color: #e53e3e; font-weight: 700; }
+    .avg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; padding: 1rem 1.25rem; }
+    .avg-card { text-align: center; }
+    .cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.3rem; }
+    .avg-score { font-size: 1.6rem; font-weight: 800; }
+    .bar-wrap { height: 5px; background: #edf2f7; border-radius: 3px; margin-top: 0.4rem; overflow: hidden; }
+    .bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #667eea, #764ba2); }
+    .patio-section { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
+    .patio-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #2d3748; color: white; flex-wrap: wrap; }
+    .patio-name { font-size: 1.1rem; font-weight: 700; flex: 1; }
+    .patio-date { font-size: 0.8rem; color: #a0aec0; }
+    .patio-overall { font-size: 1.2rem; font-weight: 800; }
+    .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; font-weight: 800; font-size: 0.95rem; }
+    .rank-1 { background: #f6e05e; color: #744210; }
+    .rank-2 { background: #e2e8f0; color: #2d3748; }
+    .rank-3 { background: #fbd38d; color: #744210; }
+    .rank-other { background: #edf2f7; color: #4a5568; font-size: 0.8rem; }
+    .person-card { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 1.25rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .person-info { flex: 1; }
+    .person-name { font-size: 1rem; font-weight: 700; color: #2d3748; }
+    .person-meta { font-size: 0.8rem; color: #718096; margin-top: 0.15rem; }
+    .person-score { font-size: 2rem; font-weight: 800; }
+    .person-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .cat-pill { background: #edf2f7; border-radius: 99px; padding: 0.2rem 0.6rem; font-size: 0.72rem; color: #4a5568; }
+    .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .stat-box { background: white; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); flex: 1; min-width: 140px; }
+    .stat-box .s-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a0aec0; margin-bottom: 0.3rem; }
+    .stat-box .s-value { font-size: 1.3rem; font-weight: 700; color: #2d3748; }
+    .stat-box .s-sub { font-size: 0.78rem; color: #718096; }
+    footer { text-align: center; font-size: 0.8rem; color: #a0aec0; margin-top: 1rem; }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>🏅 Leaderboard</h1>
+  <p class="subtitle">@the_patio_gang</p>
+  <p class="updated">Last updated: April 08, 2026 09:00 PM</p>
+  
+  <nav>
+    <a href="index.html" class="nav-link">📍 Rankings</a>
+    <a href="leaderboard.html" class="nav-link">🏅 Leaderboard</a>
+  </nav>
+
+
+  <p class="section-title">🏆 Overall Rankings</p>
+  
+  <div class="person-card">
+    <span class="rank-badge rank-1">🥇</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-f">●</span> Mary</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 5.0</span><span class="cat-pill">🍺 Bevs 5.0</span><span class="cat-pill">🙋 Service 5.0</span><span class="cat-pill">💵 Price 4.0</span><span class="cat-pill">🚽 Pisser 2.0</span></div>
+    </div>
+    <div class="person-score score-high">5.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-2">🥈</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-f">●</span> Amanda</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 4.0</span><span class="cat-pill">🍺 Bevs 5.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 2.0</span><span class="cat-pill">🚽 Pisser 3.0</span></div>
+    </div>
+    <div class="person-score score-high">4.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-3">🥉</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-m">●</span> Kellen</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 5.0</span><span class="cat-pill">🍺 Bevs 3.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 3.0</span><span class="cat-pill">🚽 Pisser 4.0</span></div>
+    </div>
+    <div class="person-score score-high">4.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-other">4</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-f">●</span> Brittany</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 4.0</span><span class="cat-pill">🍺 Bevs 5.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 3.0</span><span class="cat-pill">🚽 Pisser 3.0</span></div>
+    </div>
+    <div class="person-score score-high">4.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-other">5</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-m">●</span> Adam</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 2.0</span><span class="cat-pill">🍺 Bevs 4.0</span><span class="cat-pill">🙋 Service 3.0</span><span class="cat-pill">💵 Price 3.0</span><span class="cat-pill">🚽 Pisser 3.0</span></div>
+    </div>
+    <div class="person-score score-mid">3.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-other">6</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-m">●</span> Anthony</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 3.0</span><span class="cat-pill">🍺 Bevs 3.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 2.0</span><span class="cat-pill">🚽 Pisser 3.0</span></div>
+    </div>
+    <div class="person-score score-mid">3.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-other">7</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-f">●</span> Caroline</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 4.0</span><span class="cat-pill">🍺 Bevs 3.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 2.0</span><span class="cat-pill">🚽 Pisser 2.0</span></div>
+    </div>
+    <div class="person-score score-mid">3.0</div>
+  </div>
+  <div class="person-card">
+    <span class="rank-badge rank-other">8</span>
+    <div class="person-info">
+      <div class="person-name"><span class="gender-m">●</span> Daniel</div>
+      <div class="person-meta">1 rating</div>
+      <div class="person-cats"><span class="cat-pill">✨ Vibes 3.0</span><span class="cat-pill">🍺 Bevs 3.0</span><span class="cat-pill">🙋 Service 4.0</span><span class="cat-pill">💵 Price 3.0</span><span class="cat-pill">🚽 Pisser 3.0</span></div>
+    </div>
+    <div class="person-score score-mid">3.0</div>
+  </div>
+
+  <p class="section-title">📍 Patio Hall of Fame</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="text-align:left">Patio</th><th>Date</th><th>Overall ☂️</th></tr></thead>
+      <tbody><tr><td>🥇 State Line Distillery</td><td>4/8/2026</td><td class="score-mid">3.62</td></tr></tbody>
+    </table>
+  </div>
+
+  <p class="section-title">🎯 Category Leaders</p>
+  <div class="cat-grid">
+    <div>
+      <p class="section-title" style="margin-bottom:0.5rem">✨ Vibes</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="text-align:left">Person</th><th>Score</th></tr></thead>
+          <tbody><tr><td>🥇 Kellen</td><td class="score-high">5.0</td></tr><tr><td>🥈 Mary</td><td class="score-high">5.0</td></tr><tr><td>🥉 Amanda</td><td class="score-high">4.0</td></tr><tr><td>4 Caroline</td><td class="score-high">4.0</td></tr><tr><td>5 Brittany</td><td class="score-high">4.0</td></tr><tr><td>6 Anthony</td><td class="score-mid">3.0</td></tr><tr><td>7 Daniel</td><td class="score-mid">3.0</td></tr><tr><td>8 Adam</td><td class="score-low">2.0</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <p class="section-title" style="margin-bottom:0.5rem">🍺 Bevs</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="text-align:left">Person</th><th>Score</th></tr></thead>
+          <tbody><tr><td>🥇 Amanda</td><td class="score-high">5.0</td></tr><tr><td>🥈 Mary</td><td class="score-high">5.0</td></tr><tr><td>🥉 Brittany</td><td class="score-high">5.0</td></tr><tr><td>4 Adam</td><td class="score-high">4.0</td></tr><tr><td>5 Kellen</td><td class="score-mid">3.0</td></tr><tr><td>6 Anthony</td><td class="score-mid">3.0</td></tr><tr><td>7 Caroline</td><td class="score-mid">3.0</td></tr><tr><td>8 Daniel</td><td class="score-mid">3.0</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <p class="section-title" style="margin-bottom:0.5rem">🙋 Service</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="text-align:left">Person</th><th>Score</th></tr></thead>
+          <tbody><tr><td>🥇 Mary</td><td class="score-high">5.0</td></tr><tr><td>🥈 Amanda</td><td class="score-high">4.0</td></tr><tr><td>🥉 Kellen</td><td class="score-high">4.0</td></tr><tr><td>4 Anthony</td><td class="score-high">4.0</td></tr><tr><td>5 Caroline</td><td class="score-high">4.0</td></tr><tr><td>6 Brittany</td><td class="score-high">4.0</td></tr><tr><td>7 Daniel</td><td class="score-high">4.0</td></tr><tr><td>8 Adam</td><td class="score-mid">3.0</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <p class="section-title" style="margin-bottom:0.5rem">💵 Price</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="text-align:left">Person</th><th>Score</th></tr></thead>
+          <tbody><tr><td>🥇 Mary</td><td class="score-high">4.0</td></tr><tr><td>🥈 Adam</td><td class="score-mid">3.0</td></tr><tr><td>🥉 Kellen</td><td class="score-mid">3.0</td></tr><tr><td>4 Brittany</td><td class="score-mid">3.0</td></tr><tr><td>5 Daniel</td><td class="score-mid">3.0</td></tr><tr><td>6 Amanda</td><td class="score-low">2.0</td></tr><tr><td>7 Anthony</td><td class="score-low">2.0</td></tr><tr><td>8 Caroline</td><td class="score-low">2.0</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <p class="section-title" style="margin-bottom:0.5rem">🚽 Pisser</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="text-align:left">Person</th><th>Score</th></tr></thead>
+          <tbody><tr><td>🥇 Kellen</td><td class="score-high">4.0</td></tr><tr><td>🥈 Amanda</td><td class="score-mid">3.0</td></tr><tr><td>🥉 Adam</td><td class="score-mid">3.0</td></tr><tr><td>4 Anthony</td><td class="score-mid">3.0</td></tr><tr><td>5 Brittany</td><td class="score-mid">3.0</td></tr><tr><td>6 Daniel</td><td class="score-mid">3.0</td></tr><tr><td>7 Mary</td><td class="score-low">2.0</td></tr><tr><td>8 Caroline</td><td class="score-low">2.0</td></tr></tbody>
+        </table>
+      </div>
+    </div></div>
+
+  <footer>🦞 Auto-updated by Cade · @the_patio_gang</footer>
+</body>
+</html>
